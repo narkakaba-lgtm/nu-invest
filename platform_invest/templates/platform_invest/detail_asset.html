@@ -1,0 +1,137 @@
+{% extends 'platform_invest/base.html' %}
+
+{% block title %}Détail actif - NU INVEST{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row g-4">
+
+        <!-- ================= IMAGE ================= -->
+        <div class="col-md-6">
+
+            {% if asset.image %}
+                <img src="{{ asset.image.url }}"
+                     class="img-fluid rounded-4 shadow w-100"
+                     style="object-fit:cover;">
+            {% else %}
+                <div class="bg-light p-5 text-center rounded-4">
+                    <p class="text-muted mb-0">Aucune image disponible</p>
+                </div>
+            {% endif %}
+
+        </div>
+
+        <!-- ================= INFOS ================= -->
+        <div class="col-md-6">
+
+            <h2 class="fw-bold mb-2">{{ asset.title }}</h2>
+
+            <!-- BADGES -->
+            <div class="mb-3">
+
+                <span class="badge bg-info text-dark">
+                    {{ asset.get_category_display }}
+                </span>
+
+                {% if asset.is_verified %}
+                    <span class="badge bg-success">✔ Vérifié</span>
+                {% endif %}
+
+                <span class="badge bg-secondary">
+                    {{ asset.get_status_display }}
+                </span>
+
+            </div>
+
+            <!-- PRICE -->
+            <h3 class="text-primary fw-bold">
+                💰 {{ asset.price }} $
+            </h3>
+
+            <hr>
+
+            <!-- DESCRIPTION -->
+            <p class="text-muted">
+                {{ asset.description }}
+            </p>
+
+            <hr>
+
+            <!-- SELLER -->
+            <p class="text-muted">
+                👤 Vendeur : <strong>{{ asset.seller.username }}</strong>
+            </p>
+
+            <!-- ================= ACTIONS ================= -->
+            <div class="d-grid gap-2 mt-4">
+
+                {% if asset.contact_email %}
+                    <a href="mailto:{{ asset.contact_email }}"
+                       class="btn btn-success rounded-3">
+                        📧 Contacter le vendeur
+                    </a>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <a href="#" class="btn btn-dark rounded-3">
+                        💰 Acheter maintenant
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-warning rounded-3">
+                        🔐 Connecte-toi pour acheter
+                    </a>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= RELATED ================= -->
+    <div class="mt-5">
+
+        <h4 class="fw-bold mb-3">🔥 Autres opportunités</h4>
+
+        <div class="row">
+
+            {% for a in related_assets %}
+            <div class="col-md-4 mb-3">
+
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                    {% if a.image %}
+                        <img src="{{ a.image.url }}"
+                             class="card-img-top"
+                             style="height:150px; object-fit:cover;">
+                    {% endif %}
+
+                    <div class="card-body">
+
+                        <h6 class="fw-bold">{{ a.title }}</h6>
+
+                        <p class="text-primary fw-bold mb-2">
+                            {{ a.price }} $
+                        </p>
+
+                        <a href="{% url 'detail_asset' a.id %}"
+                           class="btn btn-sm btn-outline-dark w-100 rounded-3">
+                            Voir détails
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'platform_invest/base.html' %}
+
+{% block title %}Créer un Compte | NU INVEST{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5">
+                    <h2 class="text-center fw-bold mb-4">Inscription</h2>
+                    <p class="text-center text-muted mb-4">Rejoignez la communauté NU INVEST et lancez votre projet.</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="form-text small text-muted">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        
+                        <style>
+                            /* Style pour rendre les champs Django compatibles avec Bootstrap */
+                            input { 
+                                display: block; 
+                                width: 100%; 
+                                padding: 10px; 
+                                font-size: 1rem; 
+                                border: 1px solid #dee2e6; 
+                                border-radius: 10px; 
+                                margin-bottom: 10px;
+                            }
+                        </style>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold mt-3 shadow">S'inscrire maintenant</button>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Déjà inscrit ? <a href="{% url 'login' %}" class="text-decoration-none fw-bold text-primary">Se connecter</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'platform_invest/base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7">
+
+            <div class="card shadow border-0 p-4">
+
+                <h3 class="fw-bold text-center mb-3">
+                    💰 Paiement Manuel
+                </h3>
+
+                <p class="text-muted text-center">
+                    Vous êtes sur le point d’acheter :
+                </p>
+
+                <h4 class="text-center text-primary">
+                    {{ asset.title }}
+                </h4>
+
+                <hr>
+
+                <div class="bg-light p-3 rounded">
+
+                    <p><strong>Montant :</strong> {{ asset.price }} $</p>
+
+                    <p><strong>Méthode de paiement :</strong></p>
+
+                    <ul>
+                        <li>📱 Mobile Money</li>
+                        <li>🏦 Virement bancaire</li>
+                        <li>💵 Dépôt manuel</li>
+                    </ul>
+
+                    <p class="text-danger">
+                        ⚠️ Envoyez la preuve de paiement à l’administrateur
+                    </p>
+
+                </div>
+
+                <form method="POST" class="mt-3">
+                    {% csrf_token %}
+
+                    <button class="btn btn-success w-100">
+                        ✔ J’ai effectué le paiement
+                    </button>
+                </form>
+
+                <a href="{% url 'detail_asset' asset.id %}" class="btn btn-outline-secondary w-100 mt-2">
+                    Retour
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

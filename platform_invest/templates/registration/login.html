@@ -1,0 +1,38 @@
+{% extends 'platform_invest/base.html' %}
+
+{% block title %}Connexion | NU INVEST{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5">
+                    <h2 class="text-center fw-bold mb-4">Connexion</h2>
+                    <p class="text-center text-muted mb-4">Accédez à votre tableau de bord.</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nom d'utilisateur</label>
+                            <input type="text" name="username" class="form-control p-3" placeholder="Votre pseudo" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Mot de passe</label>
+                            <input type="password" name="password" class="form-control p-3" placeholder="Votre mot de passe" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100 py-2 fw-bold shadow">Se connecter</button>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Pas encore de compte ? <a href="{% url 'inscription' %}" class="text-decoration-none fw-bold text-primary">Créer un compte ici</a></p>
+                        <hr>
+                        <a href="{% url 'home' %}" class="text-muted small text-decoration-none">← Retour à l'accueil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

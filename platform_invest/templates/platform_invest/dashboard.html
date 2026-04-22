@@ -1,0 +1,230 @@
+{% extends 'platform_invest/base.html' %}
+
+{% block title %}Dashboard - NU INVEST{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.dashboard-header {
+    background: linear-gradient(135deg, #0052cc, #00aaff);
+    color: white;
+    padding: 25px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    border-radius: 16px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    transition: 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0052cc;
+}
+
+.small-text {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.card-pro {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-4">
+
+    <!-- HEADER -->
+    <div class="dashboard-header">
+        <h2 class="fw-bold">🚀 Dashboard Startup</h2>
+        <p class="mb-0">Bienvenue {{ user.username }}, voici tes performances</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="row g-3">
+
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ projets|length }}</div>
+                <div class="small-text">📁 Projets publiés</div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ actifs|length }}</div>
+                <div class="small-text">🛒 Actifs en vente</div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ score.score|default:0 }}</div>
+                <div class="small-text">🏆 Score Quiz</div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">
+                    {{ projets|length|add:actifs|length }}
+                </div>
+                <div class="small-text">📊 Total activités</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CHART -->
+    <div class="row mt-4">
+        <div class="col-lg-8">
+
+            <div class="card card-pro p-3">
+                <h5 class="fw-bold">📈 Activité globale</h5>
+                <canvas id="chart"></canvas>
+            </div>
+
+        </div>
+
+        <!-- ACTION PANEL -->
+        <div class="col-lg-4">
+
+            <div class="card card-pro p-3 mb-3">
+                <h6 class="fw-bold">⚡ Actions rapides</h6>
+
+                <a href="{% url 'deposer_projet' %}" class="btn btn-primary w-100 mb-2">
+                    🚀 Nouveau projet
+                </a>
+
+                <a href="{% url 'publier_vente' %}" class="btn btn-warning w-100 mb-2">
+                    💰 Vendre un actif
+                </a>
+
+                <a href="{% url 'quiz' %}" class="btn btn-success w-100">
+                    🏆 Quiz
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="mt-4">
+        <h5 class="fw-bold">📁 Mes projets</h5>
+
+        <div class="row">
+
+            {% for p in projets %}
+            <div class="col-md-6 mb-3">
+
+                <div class="card card-pro p-3">
+
+                    <h6 class="fw-bold">{{ p.project_name }}</h6>
+
+                    <p class="small-text mb-1">
+                        {{ p.description|default:"Pas de description"|truncatewords:15 }}
+                    </p>
+
+                    <p class="fw-bold text-primary">
+                        {{ p.amount_needed|default:0 }} $
+                    </p>
+
+                    <form method="POST" action="{% url 'supprimer_projet' p.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-danger w-100">
+                            🗑️ Supprimer
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+            {% empty %}
+                <p class="text-muted">Aucun projet</p>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <!-- ASSETS -->
+    <div class="mt-4">
+        <h5 class="fw-bold">🛒 Mes actifs</h5>
+
+        <div class="row">
+
+            {% for asset in actifs %}
+            <div class="col-md-6 mb-3">
+
+                <div class="card card-pro p-3">
+
+                    <h6 class="fw-bold">{{ asset.title }}</h6>
+
+                    <p class="fw-bold text-primary">
+                        {{ asset.price|default:0 }} $
+                    </p>
+
+                    <form method="POST" action="{% url 'supprimer_annonce' asset.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-danger w-100">
+                            Supprimer
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+            {% empty %}
+                <p class="text-muted">Aucun actif</p>
+            {% endfor %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('chart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Projets', 'Actifs', 'Score'],
+        datasets: [{
+            label: 'Performance',
+            data: [
+                {{ projets|length|default:0 }},
+                {{ actifs|length|default:0 }},
+                {{ score.score|default:0 }}
+            ],
+            backgroundColor: ['#2563eb', '#16a34a', '#f59e0b']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
+</script>
+{% endblock %}

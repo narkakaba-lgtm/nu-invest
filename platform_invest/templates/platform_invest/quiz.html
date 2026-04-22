@@ -1,0 +1,205 @@
+{% extends 'platform_invest/base.html' %}
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="quiz-card">
+
+        {% if error %}
+
+            <div class="text-center">
+                <div class="alert alert-info">{{ error }}</div>
+                <a href="{% url 'home' %}" class="btn btn-primary">
+                    Retour à la Marketplace
+                </a>
+            </div>
+
+        {% else %}
+
+        <!-- HEADER -->
+        <div class="text-center mb-4">
+
+            <div class="timer-circle" id="timer">15</div>
+
+            <div class="mt-2">
+                <span class="points-badge">
+                    💰 {{ question.points }} Points
+                </span>
+            </div>
+
+        </div>
+
+        <!-- QUESTION -->
+        <h3 class="text-center mb-4 fw-bold">
+            {{ question.text }}
+        </h3>
+
+        <!-- OPTIONS -->
+        <div class="d-grid gap-3">
+
+            <button class="btn btn-option" onclick="verify(1)">
+                A. {{ question.choice1 }}
+            </button>
+
+            <button class="btn btn-option" onclick="verify(2)">
+                B. {{ question.choice2 }}
+            </button>
+
+            <button class="btn btn-option" onclick="verify(3)">
+                C. {{ question.choice3 }}
+            </button>
+
+            <button class="btn btn-option" onclick="verify(4)">
+                D. {{ question.choice4 }}
+            </button>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- STYLE -->
+<style>
+body {
+    background: #0f172a;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.quiz-card {
+    max-width: 700px;
+    margin: auto;
+    background: #1e293b;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.timer-circle {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    border: 4px solid #38bdf8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.6rem;
+    margin: auto;
+    transition: 0.3s;
+}
+
+.points-badge {
+    background: #fbbf24;
+    color: black;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.btn-option {
+    background: #334155;
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    text-align: left;
+    transition: 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-option:hover {
+    background: #475569;
+    transform: translateX(5px);
+}
+
+.btn-option:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+</style>
+
+<!-- SWEETALERT -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+let timeLeft = 15;
+let answered = false;
+const timerDisplay = document.getElementById('timer');
+
+const interval = setInterval(() => {
+
+    if (!timerDisplay) return;
+
+    timeLeft--;
+    timerDisplay.innerText = timeLeft;
+
+    // ⚠️ warning visuel
+    if (timeLeft <= 5) {
+        timerDisplay.style.borderColor = "#ef4444";
+        timerDisplay.style.color = "#ef4444";
+    }
+
+    if (timeLeft <= 0) {
+        clearInterval(interval);
+
+        Swal.fire({
+            title: '⏱ Temps écoulé',
+            text: 'Passage à la question suivante',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.reload();
+        });
+    }
+
+}, 1000);
+
+function verify(choice) {
+
+    if (answered) return;
+    answered = true;
+
+    clearInterval(interval);
+
+    const correct = parseInt("{{ question.correct_answer }}");
+    const points = "{{ question.points }}";
+
+    document.querySelectorAll('.btn-option').forEach(btn => {
+        btn.disabled = true;
+    });
+
+    if (choice === correct) {
+
+        Swal.fire({
+            title: '✅ Bonne réponse',
+            text: '+' + points + ' points gagnés',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+        }).then(() => {
+            window.location.reload();
+        });
+
+    } else {
+
+        Swal.fire({
+            title: '❌ Mauvaise réponse',
+            text: 'Bonne réponse : ' + correct,
+            icon: 'error',
+            timer: 2500,
+            showConfirmButton: false
+        }).then(() => {
+            window.location.reload();
+        });
+    }
+}
+
+</script>
+
+{% endblock %}

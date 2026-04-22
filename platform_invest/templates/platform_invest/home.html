@@ -1,0 +1,211 @@
+{% extends 'platform_invest/base.html' %}
+{% load static %}
+
+{% block title %}NU INVEST - Plateforme d'investissement{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.hero {
+    background: linear-gradient(135deg, #0b3aa4, #071a3a);
+    color: white;
+    border-radius: 24px;
+    padding: 60px 25px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-weight: 900;
+}
+
+.stat-box {
+    background: white;
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+}
+
+.stat-number {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0b3aa4;
+}
+
+.section-title {
+    font-weight: 800;
+    margin: 40px 0 20px;
+}
+
+.card-pro {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    transition: 0.3s;
+}
+
+.card-pro:hover {
+    transform: translateY(-5px);
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+<!-- ================= HERO ================= -->
+<div class="hero mb-5">
+
+    <h1>🚀 Investis intelligemment</h1>
+
+    <p class="mt-3">
+        NU INVEST est une plateforme d’investissement, de marketplace et de financement de projets réels.
+    </p>
+
+    <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
+
+        {% if not user.is_authenticated %}
+            <a href="{% url 'inscription' %}" class="btn btn-light btn-lg px-4">
+                🚀 Commencer
+            </a>
+
+            <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">
+                🔐 Connexion
+            </a>
+        {% else %}
+            <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg px-4">
+                📊 Dashboard
+            </a>
+
+            <a href="{% url 'deposer_projet' %}" class="btn btn-success btn-lg px-4">
+                ➕ Publier projet
+            </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- ================= STATS ================= -->
+<div class="row g-3 mb-5 text-center">
+
+    <div class="col-6 col-lg-3">
+        <div class="stat-box">
+            <div class="stat-number">{{ total_projets }}</div>
+            <div>Projets</div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="stat-box">
+            <div class="stat-number">{{ total_assets }}</div>
+            <div>Actifs</div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="stat-box">
+            <div class="stat-number">24/7</div>
+            <div>Disponible</div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="stat-box">
+            <div class="stat-number">🔥</div>
+            <div>Opportunités</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= MARKETPLACE (EN PREMIER) ================= -->
+<h3 class="section-title">🛒 Marketplace - Actifs récents</h3>
+
+<div class="row g-4">
+
+    {% for asset in assets %}
+    <div class="col-12 col-md-6 col-lg-4">
+
+        <div class="card card-pro">
+
+            {% if asset.image %}
+                <img src="{{ asset.image.url }}" style="height:200px; object-fit:cover;">
+            {% else %}
+                <div style="height:200px; background:#f1f5f9;"></div>
+            {% endif %}
+
+            <div class="p-3">
+
+                <h5 class="fw-bold">{{ asset.title }}</h5>
+
+                <p class="text-muted small">
+                    {{ asset.description|truncatewords:15 }}
+                </p>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold text-primary">
+                        {{ asset.price }} $
+                    </span>
+
+                    <a href="{% url 'detail_asset' asset.id %}" class="btn btn-sm btn-outline-primary">
+                        Voir
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    {% empty %}
+        <p class="text-muted">Aucun actif disponible</p>
+    {% endfor %}
+
+</div>
+
+<!-- ================= PROJECTS ================= -->
+<h3 class="section-title">🚀 Projets récents</h3>
+
+<div class="row g-4">
+
+    {% for projet in projets %}
+    <div class="col-12 col-md-6 col-lg-4">
+
+        <div class="card card-pro">
+
+            {% if projet.image %}
+                <img src="{{ projet.image.url }}" style="height:200px; object-fit:cover;">
+            {% else %}
+                <div style="height:200px; background:#f1f5f9;"></div>
+            {% endif %}
+
+            <div class="p-3">
+
+                <h5 class="fw-bold">{{ projet.project_name }}</h5>
+
+                <p class="text-muted small">
+                    {{ projet.description|truncatewords:18 }}
+                </p>
+
+                <p class="fw-bold text-primary">
+                    {{ projet.amount_needed }} $
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+    {% empty %}
+        <p class="text-muted">Aucun projet disponible</p>
+    {% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}

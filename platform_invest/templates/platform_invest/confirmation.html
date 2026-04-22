@@ -1,0 +1,85 @@
+{% extends "platform_invest/base.html" %}
+{% load i18n %}
+
+{% block title %}Confirmation - NU INVEST{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-7">
+
+        <div class="card border-0 shadow-lg rounded-4 p-4 text-center">
+
+            <!-- ICON -->
+            <div class="mb-3">
+                <div style="font-size:70px;">✅</div>
+            </div>
+
+            <!-- TITLE -->
+            <h3 class="fw-bold text-success">
+                Paiement confirmé !
+            </h3>
+
+            <p class="text-muted mt-2">
+                Votre projet a bien été enregistré sur NU INVEST.
+            </p>
+
+            <!-- PROJECT DETAILS -->
+            {% if project %}
+            <div class="card mt-4 border-0 bg-light rounded-4 p-3 text-start">
+
+                <h5 class="fw-bold mb-3">📌 Détails du projet</h5>
+
+                <p><strong>Nom :</strong> {{ project.project_name }}</p>
+                <p><strong>Montant demandé :</strong> {{ project.amount_needed }} $</p>
+                <p><strong>Emplois prévus :</strong> {{ project.jobs_to_create }}</p>
+
+                <p class="mt-2">
+                    <strong>Statut :</strong>
+                    <span class="badge bg-warning text-dark px-3 py-2">
+                        En cours d’audit
+                    </span>
+                </p>
+
+            </div>
+            {% endif %}
+
+            <!-- INFO 1 -->
+            <div class="alert alert-info mt-4 text-start rounded-3">
+                <strong>🔍 Prochaine étape :</strong><br>
+                Notre équipe analyse votre projet sous 48h.
+                Vous serez notifié après validation.
+            </div>
+
+            <!-- INFO 2 -->
+            <div class="alert alert-light border text-start rounded-3">
+                🔐 Données sécurisées.<br>
+                💼 NU INVEST finance uniquement des projets vérifiés.
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
+
+                <a href="{% url 'dashboard' %}" class="btn btn-primary px-4">
+                    📊 Dashboard
+                </a>
+
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary px-4">
+                    🏠 Accueil
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- FOOT NOTE -->
+        <div class="text-center mt-4 text-muted small">
+            📧 Un email de confirmation vous sera envoyé automatiquement.
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

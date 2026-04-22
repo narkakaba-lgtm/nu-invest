@@ -1,0 +1,135 @@
+{% extends 'platform_invest/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Publier un actif" %} - NU INVEST{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.sell-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.sell-card {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.sell-header {
+    background: linear-gradient(135deg, #0052cc, #00aaff);
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.preview-box {
+    height: 220px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f8fafc;
+    overflow:hidden;
+}
+
+@media (max-width: 768px) {
+    .sell-header h2 {
+        font-size: 20px;
+    }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-4 sell-container">
+
+    <div class="sell-card">
+
+        <!-- HEADER -->
+        <div class="sell-header">
+            <h2 class="fw-bold">💰 {% trans "Publier un actif" %}</h2>
+            <p class="mb-0">{% trans "Vends ton produit en quelques clics" %}</p>
+        </div>
+
+        <!-- FORM -->
+        <div class="p-4 p-md-5">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row g-3">
+
+                    <!-- TITLE -->
+                    <div class="col-md-12">
+                        <label class="form-label">{% trans "Titre du produit" %}</label>
+                        {{ form.title }}
+                    </div>
+
+                    <!-- CATEGORY -->
+                    <div class="col-md-6">
+                        <label class="form-label">{% trans "Catégorie" %}</label>
+                        {{ form.category }}
+                    </div>
+
+                    <!-- PRICE -->
+                    <div class="col-md-6">
+                        <label class="form-label">{% trans "Prix ($)" %}</label>
+                        {{ form.price }}
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <div class="col-md-12">
+                        <label class="form-label">{% trans "Description du produit" %}</label>
+                        {{ form.description }}
+                    </div>
+
+                    <!-- IMAGE -->
+                    <div class="col-md-6">
+                        <label class="form-label">{% trans "Image du produit" %}</label>
+                        {{ form.image }}
+                    </div>
+
+                    <!-- CONTACT -->
+                    <div class="col-md-6">
+                        <label class="form-label">{% trans "Email de contact" %}</label>
+                        {{ form.contact_email }}
+                    </div>
+
+                </div>
+
+                <!-- ERRORS -->
+                {% if form.errors %}
+                    <div class="alert alert-danger mt-3">
+                        {{ form.errors }}
+                    </div>
+                {% endif %}
+
+                <!-- PREVIEW INFO -->
+                <div class="alert alert-info mt-4">
+                    🔥 {% trans "Ajoute une image claire + description pour vendre plus vite" %}
+                </div>
+
+                <!-- BUTTON -->
+                <button class="btn btn-primary w-100 py-3 fw-bold mt-3">
+                    🚀 {% trans "Publier maintenant" %}
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
