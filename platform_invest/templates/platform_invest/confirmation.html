@@ -5,77 +5,89 @@
 
 {% block content %}
 
-<div class="row justify-content-center">
+<div class="container py-5">
 
-    <div class="col-lg-7">
+    <div class="row justify-content-center">
 
-        <div class="card border-0 shadow-lg rounded-4 p-4 text-center">
+        <div class="col-12 col-md-7">
 
-            <!-- ICON -->
-            <div class="mb-3">
-                <div style="font-size:70px;">✅</div>
-            </div>
+            <div class="card border-0 shadow-lg rounded-4 p-4 text-center">
 
-            <!-- TITLE -->
-            <h3 class="fw-bold text-success">
-                Paiement confirmé !
-            </h3>
+                <!-- ================= ICON ================= -->
+                <div class="mb-3">
+                    <div style="font-size:70px;">✅</div>
+                </div>
 
-            <p class="text-muted mt-2">
-                Votre projet a bien été enregistré sur NU INVEST.
-            </p>
+                <!-- ================= TITLE ================= -->
+                <h3 class="fw-bold text-success">
+                    Paiement confirmé
+                </h3>
 
-            <!-- PROJECT DETAILS -->
-            {% if project %}
-            <div class="card mt-4 border-0 bg-light rounded-4 p-3 text-start">
-
-                <h5 class="fw-bold mb-3">📌 Détails du projet</h5>
-
-                <p><strong>Nom :</strong> {{ project.project_name }}</p>
-                <p><strong>Montant demandé :</strong> {{ project.amount_needed }} $</p>
-                <p><strong>Emplois prévus :</strong> {{ project.jobs_to_create }}</p>
-
-                <p class="mt-2">
-                    <strong>Statut :</strong>
-                    <span class="badge bg-warning text-dark px-3 py-2">
-                        En cours d’audit
-                    </span>
+                <p class="text-muted mt-2">
+                    Votre projet a été enregistré avec succès sur NU INVEST
                 </p>
 
+                <!-- ================= PROJECT DETAILS ================= -->
+                {% if project %}
+                <div class="card mt-4 border-0 bg-light rounded-4 p-3 text-start">
+
+                    <h5 class="fw-bold mb-3">📌 Résumé du projet</h5>
+
+                    <p><strong>Nom :</strong> {{ project.project_name }}</p>
+
+                    <p><strong>Montant demandé :</strong> {{ project.amount_needed }} $</p>
+
+                    <p><strong>Emplois prévus :</strong> {{ project.jobs_to_create }}</p>
+
+                    <p class="mt-2">
+                        <strong>Statut :</strong>
+                        <span class="badge bg-warning text-dark px-3 py-2">
+                            En cours d’analyse
+                        </span>
+                    </p>
+
+                </div>
+                {% endif %}
+
+                <!-- ================= PROCESS INFO ================= -->
+                <div class="alert alert-info mt-4 text-start rounded-3">
+
+                    <strong>🔍 Prochaine étape</strong><br>
+
+                    Notre équipe d’analyse examine votre projet sous 48 heures.<br>
+                    Vous recevrez une notification après validation ou refus.
+
+                </div>
+
+                <!-- ================= SECURITY INFO ================= -->
+                <div class="alert alert-light border text-start rounded-3">
+
+                    🔐 Données sécurisées et chiffrées<br>
+                    💼 NU INVEST sélectionne uniquement des projets viables<br>
+                    🌍 Plateforme d’investissement internationale
+
+                </div>
+
+                <!-- ================= ACTIONS ================= -->
+                <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
+
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary px-4">
+                        📊 Voir mon dashboard
+                    </a>
+
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary px-4">
+                        🏠 Retour accueil
+                    </a>
+
+                </div>
+
             </div>
-            {% endif %}
 
-            <!-- INFO 1 -->
-            <div class="alert alert-info mt-4 text-start rounded-3">
-                <strong>🔍 Prochaine étape :</strong><br>
-                Notre équipe analyse votre projet sous 48h.
-                Vous serez notifié après validation.
+            <!-- FOOT NOTE -->
+            <div class="text-center mt-4 text-muted small">
+                📧 Un email de confirmation a été envoyé automatiquement
             </div>
 
-            <!-- INFO 2 -->
-            <div class="alert alert-light border text-start rounded-3">
-                🔐 Données sécurisées.<br>
-                💼 NU INVEST finance uniquement des projets vérifiés.
-            </div>
-
-            <!-- BUTTONS -->
-            <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
-
-                <a href="{% url 'dashboard' %}" class="btn btn-primary px-4">
-                    📊 Dashboard
-                </a>
-
-                <a href="{% url 'home' %}" class="btn btn-outline-secondary px-4">
-                    🏠 Accueil
-                </a>
-
-            </div>
-
-        </div>
-
-        <!-- FOOT NOTE -->
-        <div class="text-center mt-4 text-muted small">
-            📧 Un email de confirmation vous sera envoyé automatiquement.
         </div>
 
     </div>
