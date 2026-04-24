@@ -6,7 +6,7 @@ from django.utils import timezone
 from datetime import timedelta
 import random
 
-from .models import Asset, Project, Question, QuizScore
+from .models import Asset, Project, Question, QuizScore, Payment
 from .forms import InscriptionForm, AssetForm, ProjectForm
 
 
@@ -43,56 +43,36 @@ def inscription(request):
 
 
 # ===============================
-# 📊 DASHBOARD (SAAS PRO)
+# 📊 DASHBOARD SAAS PRO
 # ===============================
 @login_required
 def dashboard(request):
 
     projets = Project.objects.filter(owner=request.user).order_by('-id')
     actifs = Asset.objects.filter(seller=request.user).order_by('-id')
-    score = QuizScore.objects.get_or_create(user=request.user)[0]
+    score, _ = QuizScore.objects.get_or_create(user=request.user)
+    payments = Payment.objects.filter(user=request.user).order_by('-created_at')
 
-    # ================= KPI =================
+    # KPI
     total_projets = projets.count()
     total_assets = actifs.count()
+    total_payments = payments.count()
 
-    # 💰 estimation simple (simulation)
     total_value = sum([a.price for a in actifs]) if actifs else 0
     total_funding = sum([p.amount_needed for p in projets]) if projets else 0
-
-    # ================= GRAPH 7 JOURS =================
-    labels = []
-    data_projets = []
-    data_assets = []
-
-    for i in range(6, -1, -1):
-        day = timezone.now() - timedelta(days=i)
-        labels.append(day.strftime("%d/%m"))
-
-        data_projets.append(
-            projets.filter(created_at__date=day.date()).count()
-        )
-
-        data_assets.append(
-            actifs.filter(created_at__date=day.date()).count()
-        )
 
     return render(request, 'platform_invest/dashboard.html', {
         'projets': projets,
         'actifs': actifs,
         'score': score,
+        'payments': payments,
 
         'stats': {
             'total_projets': total_projets,
             'total_assets': total_assets,
+            'total_payments': total_payments,
             'total_value': total_value,
             'total_funding': total_funding,
-        },
-
-        'graph': {
-            'labels': labels,
-            'projets': data_projets,
-            'assets': data_assets,
         }
     })
 
@@ -108,6 +88,7 @@ def publier_vente(request):
         asset = form.save(commit=False)
         asset.seller = request.user
         asset.save()
+        messages.success(request, "Annonce publiée avec succès 🚀")
         return redirect('dashboard')
 
     return render(request, 'platform_invest/publier_vente.html', {'form': form})
@@ -129,6 +110,7 @@ def supprimer_annonce(request, asset_id):
 
     if request.method == "POST":
         asset.delete()
+        messages.success(request, "Annonce supprimée")
         return redirect('dashboard')
 
     return render(request, 'platform_invest/confirmer_suppression.html', {
@@ -147,7 +129,8 @@ def deposer_projet(request):
         projet = form.save(commit=False)
         projet.owner = request.user
         projet.save()
-        return redirect('confirmation')
+        messages.success(request, "Projet publié 🚀")
+        return redirect('dashboard')
 
     return render(request, 'platform_invest/deposer_projet.html', {'form': form})
 
@@ -167,6 +150,7 @@ def supprimer_projet(request, project_id):
 
     if request.method == "POST":
         projet.delete()
+        messages.success(request, "Projet supprimé")
         return redirect('dashboard')
 
     return render(request, 'platform_invest/confirmer_suppression.html', {
@@ -207,18 +191,43 @@ def jouer_quiz(request):
 
 
 # ===============================
-# 💰 PAIEMENT MANUEL
+# 💳 PAIEMENT (SAAS PRO)
 # ===============================
+@login_required
+def create_payment(request, asset_id):
+    asset = get_object_or_404(Asset, id=asset_id)
+
+    payment, created = Payment.objects.get_or_create(
+        user=request.user,
+        asset=asset,
+        defaults={
+            'amount': asset.price,
+            'method': 'manual',
+            'status': 'pending'
+        }
+    )
+
+    messages.success(request, "💰 Paiement créé")
+    return redirect('payment_page', asset_id=asset.id)
+
+
 @login_required
 def payment_page(request, asset_id):
     asset = get_object_or_404(Asset, id=asset_id)
 
+    payment = Payment.objects.filter(user=request.user, asset=asset).first()
+
     if request.method == "POST":
-        messages.success(request, "💰 Paiement enregistré (manuel).")
+        if payment:
+            payment.status = "paid"
+            payment.save()
+
+        messages.success(request, "💰 Paiement confirmé")
         return redirect('dashboard')
 
     return render(request, 'platform_invest/payment.html', {
-        'asset': asset
+        'asset': asset,
+        'payment': payment
     })
 
 
