@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
 from django.utils import timezone
-from datetime import timedelta
 from decimal import Decimal
 import random
 
@@ -35,6 +34,7 @@ def inscription(request):
     if request.method == 'POST' and form.is_valid():
         user = form.save()
         login(request, user)
+        messages.success(request, "Compte créé avec succès 🎉")
         return redirect('dashboard')
 
     return render(request, 'registration/inscription.html', {'form': form})
@@ -51,24 +51,18 @@ def dashboard(request):
     score, _ = QuizScore.objects.get_or_create(user=request.user)
     payments = Payment.objects.filter(user=request.user).order_by('-created_at')
 
-    # KPI SAFE
-    total_projets = projets.count()
-    total_assets = actifs.count()
-    total_payments = payments.count()
-
-    total_value = sum((a.price or 0) for a in actifs)
-    total_funding = sum((p.amount_needed or 0) for p in projets)
+    total_value = sum(a.price or 0 for a in actifs)
+    total_funding = sum(p.amount_needed or 0 for p in projets)
 
     return render(request, 'platform_invest/dashboard.html', {
         'projets': projets,
         'actifs': actifs,
         'score': score,
         'payments': payments,
-
         'stats': {
-            'total_projets': total_projets,
-            'total_assets': total_assets,
-            'total_payments': total_payments,
+            'total_projets': projets.count(),
+            'total_assets': actifs.count(),
+            'total_payments': payments.count(),
             'total_value': float(total_value),
             'total_funding': float(total_funding),
         }
@@ -188,7 +182,7 @@ def jouer_quiz(request):
 
 
 # ===============================
-# 💳 PAIEMENT (STRUCTURE PRO)
+# 💳 PAYMENT SYSTEM (CORRIGÉ)
 # ===============================
 @login_required
 def create_payment(request, asset_id):
@@ -204,8 +198,13 @@ def create_payment(request, asset_id):
         }
     )
 
-    messages.success(request, "Paiement créé 💰")
-    return redirect('payment_page', asset_id=asset.id)
+    if created:
+        messages.success(request, "Paiement créé 💰")
+    else:
+        messages.info(request, "Paiement déjà existant")
+
+    # ✅ IMPORTANT: nom correct dans urls.py = payment
+    return redirect('payment', asset_id=asset.id)
 
 
 @login_required
@@ -226,7 +225,7 @@ def payment_page(request, asset_id):
 
 
 # ===============================
-# 📄 STATIC
+# 📄 PAGES STATIC
 # ===============================
 def about(request):
     return render(request, 'platform_invest/about.html')
