@@ -2,10 +2,96 @@
 {% block content %}
 
 <div class="container py-5">
-    <h2>📘 À propos de NU INVEST</h2>
-    <p>
-        NU INVEST est une plateforme qui permet d’acheter, vendre et financer des projets digitaux.
-    </p>
+
+    <!-- HEADER -->
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">📘 À propos de NU INVEST</h1>
+
+        <p class="text-muted">
+            Une plateforme moderne pour investir, acheter et financer des actifs digitaux.
+        </p>
+
+    </div>
+
+    <!-- PRESENTATION -->
+    <div class="row justify-content-center">
+
+        <div class="col-lg-9">
+
+            <div class="card border-0 shadow-sm p-4 rounded-4">
+
+                <h4 class="fw-bold mb-3">🚀 Notre mission</h4>
+
+                <p>
+                    NU INVEST connecte les entrepreneurs et investisseurs à travers une plateforme
+                    simple, sécurisée et accessible partout dans le monde.
+                </p>
+
+                <p>
+                    Nous permettons de :
+                </p>
+
+                <ul>
+                    <li>🛒 Acheter et vendre des actifs digitaux</li>
+                    <li>🚀 Financer des projets réels</li>
+                    <li>📊 Suivre ses performances en temps réel</li>
+                    <li>🏆 Gagner des récompenses via des quiz et activités</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FEATURES -->
+    <div class="row mt-5 g-4 text-center">
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 rounded-4 h-100">
+                <h5>🔐 Sécurité</h5>
+                <p class="text-muted">
+                    Toutes les transactions sont protégées et contrôlées.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 rounded-4 h-100">
+                <h5>⚡ Rapidité</h5>
+                <p class="text-muted">
+                    Publication et investissement en quelques clics.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 rounded-4 h-100">
+                <h5>🌍 Global</h5>
+                <p class="text-muted">
+                    Accessible depuis n’importe quel pays.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CALL TO ACTION -->
+    <div class="text-center mt-5">
+
+        <h4 class="fw-bold">🚀 Rejoindre NU INVEST</h4>
+
+        <p class="text-muted">
+            Commence à investir ou publier ton projet dès maintenant.
+        </p>
+
+        <a href="{% url 'inscription' %}" class="btn btn-primary px-4 py-2">
+            Créer un compte
+        </a>
+
+    </div>
+
 </div>
 
 {% endblock %}
