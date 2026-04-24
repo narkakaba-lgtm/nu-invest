@@ -1,4 +1,5 @@
 {% extends 'platform_invest/base.html' %}
+
 {% block content %}
 
 <div class="container py-5">
@@ -10,13 +11,13 @@
             <div class="text-center">
                 <div class="alert alert-info">{{ error }}</div>
                 <a href="{% url 'home' %}" class="btn btn-primary">
-                    Retour à la Marketplace
+                    Retour
                 </a>
             </div>
 
         {% else %}
 
-        <!-- HEADER -->
+        <!-- TIMER -->
         <div class="text-center mb-4">
 
             <div class="timer-circle" id="timer">15</div>
@@ -34,26 +35,32 @@
             {{ question.text }}
         </h3>
 
-        <!-- OPTIONS -->
-        <div class="d-grid gap-3">
+        <!-- FORMULAIRE SÉCURISÉ -->
+        <form method="POST" id="quizForm">
+            {% csrf_token %}
 
-            <button class="btn btn-option" onclick="verify(1)">
-                A. {{ question.choice1 }}
-            </button>
+            <input type="hidden" name="answer" id="answerInput">
 
-            <button class="btn btn-option" onclick="verify(2)">
-                B. {{ question.choice2 }}
-            </button>
+            <div class="d-grid gap-3">
 
-            <button class="btn btn-option" onclick="verify(3)">
-                C. {{ question.choice3 }}
-            </button>
+                <button type="button" class="btn btn-option" onclick="selectAnswer(1)">
+                    A. {{ question.choice1 }}
+                </button>
 
-            <button class="btn btn-option" onclick="verify(4)">
-                D. {{ question.choice4 }}
-            </button>
+                <button type="button" class="btn btn-option" onclick="selectAnswer(2)">
+                    B. {{ question.choice2 }}
+                </button>
 
-        </div>
+                <button type="button" class="btn btn-option" onclick="selectAnswer(3)">
+                    C. {{ question.choice3 }}
+                </button>
+
+                <button type="button" class="btn btn-option" onclick="selectAnswer(4)">
+                    D. {{ question.choice4 }}
+                </button>
+
+            </div>
+        </form>
 
         {% endif %}
 
@@ -61,8 +68,9 @@
 
 </div>
 
-<!-- STYLE -->
+<!-- ================= STYLE ================= -->
 <style>
+
 body {
     background: #0f172a;
     color: white;
@@ -117,87 +125,69 @@ body {
     transform: translateX(5px);
 }
 
-.btn-option:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
 </style>
 
-<!-- SWEETALERT -->
+<!-- ================= SCRIPT ================= -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 
 let timeLeft = 15;
+let timer = document.getElementById("timer");
+let form = document.getElementById("quizForm");
 let answered = false;
-const timerDisplay = document.getElementById('timer');
 
-const interval = setInterval(() => {
+// ================= TIMER =================
+let interval = setInterval(() => {
 
-    if (!timerDisplay) return;
+    if (!timer) return;
 
     timeLeft--;
-    timerDisplay.innerText = timeLeft;
+    timer.innerText = timeLeft;
 
-    // ⚠️ warning visuel
     if (timeLeft <= 5) {
-        timerDisplay.style.borderColor = "#ef4444";
-        timerDisplay.style.color = "#ef4444";
+        timer.style.borderColor = "#ef4444";
+        timer.style.color = "#ef4444";
     }
 
     if (timeLeft <= 0) {
         clearInterval(interval);
 
         Swal.fire({
-            title: '⏱ Temps écoulé',
-            text: 'Passage à la question suivante',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            window.location.reload();
+            title: "⏱ Temps écoulé",
+            text: "Réponse non enregistrée",
+            icon: "error",
+            timer: 1200,
+            showConfirmButton: false
         });
+
+        setTimeout(() => {
+            form.submit(); // envoie sans réponse
+        }, 1200);
     }
 
 }, 1000);
 
-function verify(choice) {
+// ================= ANSWER =================
+function selectAnswer(value) {
 
     if (answered) return;
     answered = true;
 
+    document.getElementById("answerInput").value = value;
+
     clearInterval(interval);
 
-    const correct = parseInt("{{ question.correct_answer }}");
-    const points = "{{ question.points }}";
-
-    document.querySelectorAll('.btn-option').forEach(btn => {
-        btn.disabled = true;
+    Swal.fire({
+        title: "Réponse envoyée",
+        icon: "success",
+        timer: 700,
+        showConfirmButton: false
     });
 
-    if (choice === correct) {
-
-        Swal.fire({
-            title: '✅ Bonne réponse',
-            text: '+' + points + ' points gagnés',
-            icon: 'success',
-            timer: 2000,
-            showConfirmButton: false
-        }).then(() => {
-            window.location.reload();
-        });
-
-    } else {
-
-        Swal.fire({
-            title: '❌ Mauvaise réponse',
-            text: 'Bonne réponse : ' + correct,
-            icon: 'error',
-            timer: 2500,
-            showConfirmButton: false
-        }).then(() => {
-            window.location.reload();
-        });
-    }
+    setTimeout(() => {
+        form.submit();
+    }, 700);
 }
 
 </script>
