@@ -9,12 +9,12 @@
     <div class="row g-4">
 
         <!-- ================= IMAGE ================= -->
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
 
             {% if asset.image %}
                 <img src="{{ asset.image.url }}"
                      class="img-fluid rounded-4 shadow w-100"
-                     style="object-fit:cover;">
+                     style="object-fit:cover; max-height:420px;">
             {% else %}
                 <div class="bg-light p-5 text-center rounded-4">
                     <p class="text-muted mb-0">Aucune image disponible</p>
@@ -24,9 +24,9 @@
         </div>
 
         <!-- ================= INFOS ================= -->
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
 
-            <h2 class="fw-bold mb-2">{{ asset.title }}</h2>
+            <h2 class="fw-bold">{{ asset.title }}</h2>
 
             <!-- BADGES -->
             <div class="mb-3">
@@ -75,9 +75,16 @@
                 {% endif %}
 
                 {% if user.is_authenticated %}
-                    <a href="#" class="btn btn-dark rounded-3">
-                        💰 Acheter maintenant
-                    </a>
+
+                    <!-- 💳 PAYMENT BUTTON CONNECTÉ -->
+                    <form method="POST" action="{% url 'create_payment' asset.id %}">
+                        {% csrf_token %}
+
+                        <button class="btn btn-dark w-100 rounded-3">
+                            💳 Acheter maintenant
+                        </button>
+                    </form>
+
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn-warning rounded-3">
                         🔐 Connecte-toi pour acheter
@@ -98,14 +105,14 @@
         <div class="row">
 
             {% for a in related_assets %}
-            <div class="col-md-4 mb-3">
+            <div class="col-12 col-md-4 mb-3">
 
                 <div class="card border-0 shadow-sm rounded-4 h-100">
 
                     {% if a.image %}
                         <img src="{{ a.image.url }}"
                              class="card-img-top"
-                             style="height:150px; object-fit:cover;">
+                             style="height:160px; object-fit:cover;">
                     {% endif %}
 
                     <div class="card-body">
