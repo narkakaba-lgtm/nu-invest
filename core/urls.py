@@ -14,6 +14,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+f'privacy'),
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -21,6 +23,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 
 from platform_invest import views as v
+
 
 urlpatterns = [
 
@@ -30,12 +33,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # ===============================
-    # MULTILINGUE
+    # i18n
     # ===============================
     path('i18n/', include('django.conf.urls.i18n')),
 
     # ===============================
-    # ACCUEIL
+    # HOME
     # ===============================
     path('', v.home, name='home'),
 
@@ -72,8 +75,13 @@ urlpatterns = [
     path('projets/delete/<int:project_id>/', v.supprimer_projet, name='supprimer_projet'),
 
     # ===============================
-    # 💰 PAYMENT (AJOUT IMPORTANT)
+    # 💳 PAYMENT SYSTEM (CLEAN)
     # ===============================
+
+    # créer paiement
+    path('payment/create/<int:asset_id>/', v.create_payment, name='create_payment'),
+
+    # page paiement
     path('payment/<int:asset_id>/', v.payment_page, name='payment'),
 
     # ===============================
@@ -82,13 +90,14 @@ urlpatterns = [
     path('quiz/', v.jouer_quiz, name='quiz'),
 
     # ===============================
-    # PAGES PRO
+    # PAGES STATIC
     # ===============================
     path('about/', v.about, name='about'),
     path('privacy/', v.privacy, name='privacy'),
     path('support/', v.support, name='support'),
     path('help/', v.help_page, name='help'),
 ]
+
 
 # ===============================
 # MEDIA (DEV ONLY)
