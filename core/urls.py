@@ -22,22 +22,14 @@ from django.contrib.auth import views as auth_views
 
 from platform_invest import views as v
 
-
 urlpatterns = [
 
-    # ADMIN
     path('admin/', admin.site.urls),
-
-    # i18n
     path('i18n/', include('django.conf.urls.i18n')),
 
-    # HOME
     path('', v.home, name='home'),
-
-    # DASHBOARD
     path('dashboard/', v.dashboard, name='dashboard'),
 
-    # AUTH
     path('inscription/', v.inscription, name='inscription'),
 
     path('login/', auth_views.LoginView.as_view(
@@ -48,30 +40,24 @@ urlpatterns = [
         next_page='home'
     ), name='logout'),
 
-    # MARKETPLACE
     path('market/publier/', v.publier_vente, name='publier_vente'),
     path('market/asset/<int:asset_id>/', v.detail_asset, name='detail_asset'),
     path('market/delete/<int:asset_id>/', v.supprimer_annonce, name='supprimer_annonce'),
 
-    # PROJETS
     path('projets/deposer/', v.deposer_projet, name='deposer_projet'),
     path('projets/confirmation/', v.confirmation_paiement, name='confirmation'),
     path('projets/delete/<int:project_id>/', v.supprimer_projet, name='supprimer_projet'),
 
-    # PAYMENT
     path('payment/create/<int:asset_id>/', v.create_payment, name='create_payment'),
     path('payment/<int:asset_id>/', v.payment_page, name='payment'),
 
-    # QUIZ
     path('quiz/', v.jouer_quiz, name='quiz'),
 
-    # STATIC PAGES
     path('about/', v.about, name='about'),
     path('privacy/', v.privacy, name='privacy'),
     path('support/', v.support, name='support'),
     path('help/', v.help_page, name='help'),
 ]
 
-# MEDIA
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
