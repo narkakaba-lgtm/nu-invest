@@ -6,52 +6,74 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-md-7">
+        <div class="col-12 col-md-7">
 
-            <div class="card shadow border-0 p-4">
+            <div class="card shadow border-0 p-4 rounded-4">
 
-                <h3 class="fw-bold text-center mb-3">
-                    💰 Paiement Manuel
+                <!-- ================= TITLE ================= -->
+                <h3 class="fw-bold text-center mb-2">
+                    💳 Finaliser le paiement
                 </h3>
 
-                <p class="text-muted text-center">
-                    Vous êtes sur le point d’acheter :
+                <p class="text-muted text-center mb-4">
+                    Vous êtes sur le point d’acheter cet actif
                 </p>
 
-                <h4 class="text-center text-primary">
-                    {{ asset.title }}
-                </h4>
+                <!-- ================= ASSET ================= -->
+                <div class="text-center mb-3">
 
-                <hr>
+                    <h4 class="fw-bold text-primary">
+                        {{ asset.title }}
+                    </h4>
 
-                <div class="bg-light p-3 rounded">
-
-                    <p><strong>Montant :</strong> {{ asset.price }} $</p>
-
-                    <p><strong>Méthode de paiement :</strong></p>
-
-                    <ul>
-                        <li>📱 Mobile Money</li>
-                        <li>🏦 Virement bancaire</li>
-                        <li>💵 Dépôt manuel</li>
-                    </ul>
-
-                    <p class="text-danger">
-                        ⚠️ Envoyez la preuve de paiement à l’administrateur
-                    </p>
+                    <h2 class="fw-bold text-dark">
+                        {{ asset.price }} $
+                    </h2>
 
                 </div>
 
-                <form method="POST" class="mt-3">
+                <hr>
+
+                <!-- ================= PAYMENT METHODS ================= -->
+                <div class="bg-light p-3 rounded-3 mb-3">
+
+                    <h6 class="fw-bold mb-2">💰 Méthodes disponibles</h6>
+
+                    <ul class="mb-0">
+                        <li>📱 Mobile Money (MaxiCash / local API)</li>
+                        <li>🏦 Virement bancaire</li>
+                        <li>💵 Paiement manuel (fallback)</li>
+                        <li>₿ Crypto (future integration)</li>
+                    </ul>
+
+                </div>
+
+                <!-- ================= STATUS ================= -->
+                <div class="alert alert-warning text-center">
+
+                    ⚠️ Paiement en attente de confirmation
+
+                    <br>
+
+                    <small>
+                        Après paiement, cliquez sur le bouton pour confirmer
+                    </small>
+
+                </div>
+
+                <!-- ================= ACTION ================= -->
+                <form method="POST">
                     {% csrf_token %}
 
-                    <button class="btn btn-success w-100">
-                        ✔ J’ai effectué le paiement
+                    <button class="btn btn-success w-100 py-2 fw-bold rounded-3">
+                        ✔ Confirmer le paiement
                     </button>
                 </form>
 
-                <a href="{% url 'detail_asset' asset.id %}" class="btn btn-outline-secondary w-100 mt-2">
-                    Retour
+                <!-- BACK -->
+                <a href="{% url 'detail_asset' asset.id %}"
+                   class="btn btn-outline-secondary w-100 mt-2 rounded-3">
+                    ← Retour
                 </a>
 
             </div>
