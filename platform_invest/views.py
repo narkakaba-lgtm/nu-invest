@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
+from decimal import Decimal
 import random
 
 from .models import Asset, Project, Question, QuizScore, Payment
@@ -14,12 +15,9 @@ from .forms import InscriptionForm, AssetForm, ProjectForm
 # 🏠 HOME
 # ===============================
 def home(request):
-    assets = Asset.objects.order_by('-created_at')[:6]
-    projets = Project.objects.order_by('-created_at')[:6]
-
     return render(request, 'platform_invest/home.html', {
-        'assets': assets,
-        'projets': projets,
+        'assets': Asset.objects.order_by('-created_at')[:6],
+        'projets': Project.objects.order_by('-created_at')[:6],
         'total_assets': Asset.objects.count(),
         'total_projets': Project.objects.count(),
     })
@@ -43,7 +41,7 @@ def inscription(request):
 
 
 # ===============================
-# 📊 DASHBOARD SAAS PRO
+# 📊 DASHBOARD
 # ===============================
 @login_required
 def dashboard(request):
@@ -53,13 +51,13 @@ def dashboard(request):
     score, _ = QuizScore.objects.get_or_create(user=request.user)
     payments = Payment.objects.filter(user=request.user).order_by('-created_at')
 
-    # KPI
+    # KPI SAFE
     total_projets = projets.count()
     total_assets = actifs.count()
     total_payments = payments.count()
 
-    total_value = sum([a.price for a in actifs]) if actifs else 0
-    total_funding = sum([p.amount_needed for p in projets]) if projets else 0
+    total_value = sum((a.price or 0) for a in actifs)
+    total_funding = sum((p.amount_needed or 0) for p in projets)
 
     return render(request, 'platform_invest/dashboard.html', {
         'projets': projets,
@@ -71,8 +69,8 @@ def dashboard(request):
             'total_projets': total_projets,
             'total_assets': total_assets,
             'total_payments': total_payments,
-            'total_value': total_value,
-            'total_funding': total_funding,
+            'total_value': float(total_value),
+            'total_funding': float(total_funding),
         }
     })
 
@@ -88,7 +86,7 @@ def publier_vente(request):
         asset = form.save(commit=False)
         asset.seller = request.user
         asset.save()
-        messages.success(request, "Annonce publiée avec succès 🚀")
+        messages.success(request, "Annonce publiée 🚀")
         return redirect('dashboard')
 
     return render(request, 'platform_invest/publier_vente.html', {'form': form})
@@ -96,11 +94,10 @@ def publier_vente(request):
 
 def detail_asset(request, asset_id):
     asset = get_object_or_404(Asset, id=asset_id)
-    related_assets = Asset.objects.exclude(id=asset.id)[:3]
 
     return render(request, 'platform_invest/detail_asset.html', {
         'asset': asset,
-        'related_assets': related_assets
+        'related_assets': Asset.objects.exclude(id=asset.id)[:3]
     })
 
 
@@ -191,7 +188,7 @@ def jouer_quiz(request):
 
 
 # ===============================
-# 💳 PAIEMENT (SAAS PRO)
+# 💳 PAIEMENT (STRUCTURE PRO)
 # ===============================
 @login_required
 def create_payment(request, asset_id):
@@ -207,22 +204,19 @@ def create_payment(request, asset_id):
         }
     )
 
-    messages.success(request, "💰 Paiement créé")
+    messages.success(request, "Paiement créé 💰")
     return redirect('payment_page', asset_id=asset.id)
 
 
 @login_required
 def payment_page(request, asset_id):
     asset = get_object_or_404(Asset, id=asset_id)
-
     payment = Payment.objects.filter(user=request.user, asset=asset).first()
 
-    if request.method == "POST":
-        if payment:
-            payment.status = "paid"
-            payment.save()
-
-        messages.success(request, "💰 Paiement confirmé")
+    if request.method == "POST" and payment:
+        payment.status = "paid"
+        payment.save()
+        messages.success(request, "Paiement confirmé 💰")
         return redirect('dashboard')
 
     return render(request, 'platform_invest/payment.html', {
@@ -232,7 +226,7 @@ def payment_page(request, asset_id):
 
 
 # ===============================
-# 📄 PAGES STATIC
+# 📄 STATIC
 # ===============================
 def about(request):
     return render(request, 'platform_invest/about.html')
