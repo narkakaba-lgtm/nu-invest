@@ -1,0 +1,92 @@
+{% extends 'platform_invest/base.html' %}
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- HEADER -->
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">🔐 Politique de confidentialité</h1>
+
+        <p class="text-muted">
+            NU INVEST protège vos données et respecte votre vie privée.
+        </p>
+
+    </div>
+
+    <!-- CONTENT -->
+    <div class="row justify-content-center">
+
+        <div class="col-lg-9">
+
+            <div class="card border-0 shadow-sm p-4 rounded-4">
+
+                <h4 class="fw-bold mb-3">1. 📊 Collecte des données</h4>
+
+                <p>
+                    Nous collectons uniquement les informations nécessaires au fonctionnement de la plateforme :
+                    nom, email, activité et transactions.
+                </p>
+
+                <hr>
+
+                <h4 class="fw-bold mb-3">2. 🔐 Utilisation des données</h4>
+
+                <p>
+                    Vos données sont utilisées pour :
+                </p>
+
+                <ul>
+                    <li>Créer et gérer votre compte</li>
+                    <li>Gérer les transactions</li>
+                    <li>Améliorer l’expérience utilisateur</li>
+                </ul>
+
+                <hr>
+
+                <h4 class="fw-bold mb-3">3. 🛡️ Sécurité</h4>
+
+                <p>
+                    NU INVEST utilise des systèmes de sécurité avancés pour protéger vos informations contre tout accès non autorisé.
+                </p>
+
+                <hr>
+
+                <h4 class="fw-bold mb-3">4. 🤝 Partage des données</h4>
+
+                <p>
+                    Nous ne vendons jamais vos données. Certaines informations peuvent être partagées uniquement avec des services de paiement sécurisés.
+                </p>
+
+                <hr>
+
+                <h4 class="fw-bold mb-3">5. 📅 Mise à jour</h4>
+
+                <p>
+                    Cette politique peut être mise à jour à tout moment pour améliorer la sécurité et la conformité.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center mt-5">
+
+        <h5 class="fw-bold">📩 Questions sur la confidentialité ?</h5>
+
+        <p class="text-muted">
+            Contacte notre support pour plus d’informations.
+        </p>
+
+        <a href="{% url 'support' %}" class="btn btn-primary px-4">
+            Contacter le support
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
