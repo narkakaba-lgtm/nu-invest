@@ -6,13 +6,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # ===============================
-# 🔒 SÉCURITÉ
+# 🔐 SÉCURITÉ
 # ===============================
 SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-key-dev')
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = False  # ⚠️ mets False en production
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "narcisse.pythonanywhere.com",
+    "127.0.0.1",
+    "localhost"
+]
 
 
 # ===============================
@@ -36,7 +40,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # 🔥 IMPORTANT (production)
+    # WhiteNoise pour les fichiers statiques
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -77,21 +81,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # ===============================
-# 🗄️ DATABASE
+# 🗄 DATABASE
 # ===============================
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # dev
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-# 👉 PLUS TARD (PROD)
-# PostgreSQL recommandé
-
 
 # ===============================
-# 🌍 LANGUES
+# 🌍 INTERNATIONALISATION
 # ===============================
 LANGUAGE_CODE = 'fr'
 TIME_ZONE = 'Africa/Luanda'
@@ -113,11 +114,13 @@ LOCALE_PATHS = [BASE_DIR / 'locale']
 # ===============================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # prod
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# WhiteNoise optimisation
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # ===============================
@@ -128,7 +131,7 @@ LOGOUT_REDIRECT_URL = 'home'
 
 
 # ===============================
-# 🔒 SÉCURITÉ AVANCÉE (PROD)
+# 🚀 PRODUCTION SECURITY
 # ===============================
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
@@ -139,13 +142,8 @@ if not DEBUG:
 
     X_FRAME_OPTIONS = 'DENY'
 
-    SECURE_SSL_REDIRECT = True
-
 
 # ===============================
 # ⚙️ DEFAULT
 # ===============================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
