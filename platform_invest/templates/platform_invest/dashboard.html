@@ -2,109 +2,76 @@
 
 {% block title %}Dashboard - NU INVEST{% endblock %}
 
-{% block extra_css %}
-<style>
-
-.dashboard-header {
-    background: linear-gradient(135deg, #0052cc, #00aaff);
-    color: white;
-    padding: 25px;
-    border-radius: 18px;
-    margin-bottom: 25px;
-}
-
-.stat-card {
-    border-radius: 16px;
-    padding: 20px;
-    background: white;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-    transition: 0.2s;
-}
-
-.stat-card:hover {
-    transform: translateY(-3px);
-}
-
-.stat-number {
-    font-size: 28px;
-    font-weight: 800;
-    color: #0052cc;
-}
-
-.small-text {
-    color: #6b7280;
-    font-size: 13px;
-}
-
-.card-pro {
-    border-radius: 16px;
-    border: none;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-}
-
-</style>
-{% endblock %}
-
 {% block content %}
 
 <div class="container my-4">
 
-    <!-- HEADER -->
-    <div class="dashboard-header">
+    <!-- ================= HEADER ================= -->
+    <div class="dashboard-header text-center">
+
         <h2 class="fw-bold">🚀 Dashboard Startup</h2>
-        <p class="mb-0">Bienvenue {{ user.username }}, voici tes performances</p>
+
+        <p class="mb-0">
+            Bienvenue <strong>{{ user.username }}</strong>, voici ton activité
+        </p>
+
     </div>
 
-    <!-- STATS -->
+    <!-- ================= STATS ================= -->
     <div class="row g-3">
 
-        <div class="col-md-3">
-            <div class="stat-card">
+        <div class="col-6 col-md-3">
+            <div class="stat-card text-center">
                 <div class="stat-number">{{ projets|length }}</div>
-                <div class="small-text">📁 Projets publiés</div>
+                <div class="small-text">📁 Projets</div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="stat-card">
+        <div class="col-6 col-md-3">
+            <div class="stat-card text-center">
                 <div class="stat-number">{{ actifs|length }}</div>
-                <div class="small-text">🛒 Actifs en vente</div>
+                <div class="small-text">🛒 Actifs</div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="stat-card">
+        <div class="col-6 col-md-3">
+            <div class="stat-card text-center">
                 <div class="stat-number">{{ score.score|default:0 }}</div>
-                <div class="small-text">🏆 Score Quiz</div>
+                <div class="small-text">🏆 Score</div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="stat-card">
+        <div class="col-6 col-md-3">
+            <div class="stat-card text-center">
                 <div class="stat-number">
                     {{ projets|length|add:actifs|length }}
                 </div>
-                <div class="small-text">📊 Total activités</div>
+                <div class="small-text">📊 Activités</div>
             </div>
         </div>
 
     </div>
 
-    <!-- CHART -->
+    <!-- ================= CHART ================= -->
     <div class="row mt-4">
+
         <div class="col-lg-8">
 
             <div class="card card-pro p-3">
+
                 <h5 class="fw-bold">📈 Activité globale</h5>
+
                 <canvas id="chart"></canvas>
+
             </div>
 
         </div>
 
-        <!-- ACTION PANEL -->
+        <!-- ================= ACTIONS ================= -->
         <div class="col-lg-4">
 
-            <div class="card card-pro p-3 mb-3">
+            <div class="card card-pro p-3">
+
                 <h6 class="fw-bold">⚡ Actions rapides</h6>
 
                 <a href="{% url 'deposer_projet' %}" class="btn btn-primary w-100 mb-2">
@@ -118,30 +85,33 @@
                 <a href="{% url 'quiz' %}" class="btn btn-success w-100">
                     🏆 Quiz
                 </a>
+
             </div>
 
         </div>
+
     </div>
 
-    <!-- PROJECTS -->
+    <!-- ================= PROJECTS ================= -->
     <div class="mt-4">
+
         <h5 class="fw-bold">📁 Mes projets</h5>
 
         <div class="row">
 
             {% for p in projets %}
-            <div class="col-md-6 mb-3">
+            <div class="col-12 col-md-6 mb-3">
 
                 <div class="card card-pro p-3">
 
                     <h6 class="fw-bold">{{ p.project_name }}</h6>
 
-                    <p class="small-text mb-1">
+                    <p class="small-text">
                         {{ p.description|default:"Pas de description"|truncatewords:15 }}
                     </p>
 
                     <p class="fw-bold text-primary">
-                        {{ p.amount_needed|default:0 }} $
+                        {{ p.amount_needed }} $
                     </p>
 
                     <form method="POST" action="{% url 'supprimer_projet' p.id %}">
@@ -159,23 +129,25 @@
             {% endfor %}
 
         </div>
+
     </div>
 
-    <!-- ASSETS -->
+    <!-- ================= ASSETS ================= -->
     <div class="mt-4">
+
         <h5 class="fw-bold">🛒 Mes actifs</h5>
 
         <div class="row">
 
             {% for asset in actifs %}
-            <div class="col-md-6 mb-3">
+            <div class="col-12 col-md-6 mb-3">
 
                 <div class="card card-pro p-3">
 
                     <h6 class="fw-bold">{{ asset.title }}</h6>
 
                     <p class="fw-bold text-primary">
-                        {{ asset.price|default:0 }} $
+                        {{ asset.price }} $
                     </p>
 
                     <form method="POST" action="{% url 'supprimer_annonce' asset.id %}">
@@ -193,6 +165,7 @@
             {% endfor %}
 
         </div>
+
     </div>
 
 </div>
@@ -200,8 +173,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
 const ctx = document.getElementById('chart');
 
