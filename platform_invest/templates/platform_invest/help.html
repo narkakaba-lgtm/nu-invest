@@ -1,0 +1,115 @@
+{% extends 'platform_invest/base.html' %}
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- HEADER -->
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">❓ Centre d’aide NU INVEST</h1>
+
+        <p class="text-muted">
+            Trouve rapidement des réponses ou contacte notre support.
+        </p>
+
+    </div>
+
+    <!-- SEARCH BOX (UI) -->
+    <div class="row justify-content-center mb-4">
+
+        <div class="col-lg-8">
+
+            <input type="text" class="form-control form-control-lg"
+                   placeholder="🔎 Rechercher une question...">
+
+        </div>
+
+    </div>
+
+    <!-- FAQ -->
+    <div class="row justify-content-center">
+
+        <div class="col-lg-9">
+
+            <div class="accordion" id="faqAccordion">
+
+                <!-- 1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#q1">
+                            💰 Comment vendre un actif ?
+                        </button>
+                    </h2>
+                    <div id="q1" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            Va dans "Vendre", remplis le formulaire et publie ton actif.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#q2">
+                            🚀 Comment publier un projet ?
+                        </button>
+                    </h2>
+                    <div id="q2" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            Clique sur "Projet", remplis les détails et soumets ton idée pour analyse.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#q3">
+                            💳 Comment fonctionne le paiement ?
+                        </button>
+                    </h2>
+                    <div id="q3" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            Les paiements peuvent être manuels, mobile money ou API (MaxiCash / Stripe / crypto).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#q4">
+                            🔐 Mon compte est-il sécurisé ?
+                        </button>
+                    </h2>
+                    <div id="q4" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            Oui, toutes les données sont protégées et hébergées sur des serveurs sécurisés.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CONTACT SUPPORT -->
+    <div class="text-center mt-5">
+
+        <h4 class="fw-bold">📞 Besoin d’aide directe ?</h4>
+
+        <p class="text-muted">
+            Contacte notre équipe support 24/7
+        </p>
+
+        <a href="{% url 'support' %}" class="btn btn-primary px-4">
+            Contacter le support
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
