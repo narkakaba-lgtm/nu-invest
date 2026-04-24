@@ -3,128 +3,120 @@
 
 {% block title %}{% trans "Publier un actif" %} - NU INVEST{% endblock %}
 
-{% block extra_css %}
-<style>
-
-.sell-container {
-    max-width: 900px;
-    margin: auto;
-}
-
-.sell-card {
-    border-radius: 20px;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    overflow: hidden;
-}
-
-.sell-header {
-    background: linear-gradient(135deg, #0052cc, #00aaff);
-    color: white;
-    padding: 25px;
-    text-align: center;
-}
-
-.form-label {
-    font-weight: 600;
-}
-
-.preview-box {
-    height: 220px;
-    border: 2px dashed #cbd5e1;
-    border-radius: 12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#f8fafc;
-    overflow:hidden;
-}
-
-@media (max-width: 768px) {
-    .sell-header h2 {
-        font-size: 20px;
-    }
-}
-
-</style>
-{% endblock %}
-
 {% block content %}
 
-<div class="container my-4 sell-container">
+<div class="container my-5">
 
-    <div class="sell-card">
+    <div class="row justify-content-center">
 
-        <!-- HEADER -->
-        <div class="sell-header">
-            <h2 class="fw-bold">💰 {% trans "Publier un actif" %}</h2>
-            <p class="mb-0">{% trans "Vends ton produit en quelques clics" %}</p>
-        </div>
+        <div class="col-12 col-md-8">
 
-        <!-- FORM -->
-        <div class="p-4 p-md-5">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
 
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+                <!-- ================= HEADER ================= -->
+                <div class="text-white text-center py-4"
+                     style="background: linear-gradient(135deg, #0052cc, #00aaff);">
 
-                <div class="row g-3">
+                    <h2 class="fw-bold mb-1">
+                        💰 {% trans "Publier un actif" %}
+                    </h2>
 
-                    <!-- TITLE -->
-                    <div class="col-md-12">
-                        <label class="form-label">{% trans "Titre du produit" %}</label>
-                        {{ form.title }}
-                    </div>
-
-                    <!-- CATEGORY -->
-                    <div class="col-md-6">
-                        <label class="form-label">{% trans "Catégorie" %}</label>
-                        {{ form.category }}
-                    </div>
-
-                    <!-- PRICE -->
-                    <div class="col-md-6">
-                        <label class="form-label">{% trans "Prix ($)" %}</label>
-                        {{ form.price }}
-                    </div>
-
-                    <!-- DESCRIPTION -->
-                    <div class="col-md-12">
-                        <label class="form-label">{% trans "Description du produit" %}</label>
-                        {{ form.description }}
-                    </div>
-
-                    <!-- IMAGE -->
-                    <div class="col-md-6">
-                        <label class="form-label">{% trans "Image du produit" %}</label>
-                        {{ form.image }}
-                    </div>
-
-                    <!-- CONTACT -->
-                    <div class="col-md-6">
-                        <label class="form-label">{% trans "Email de contact" %}</label>
-                        {{ form.contact_email }}
-                    </div>
+                    <p class="mb-0 opacity-75">
+                        {% trans "Vends ton produit en quelques clics" %}
+                    </p>
 
                 </div>
 
-                <!-- ERRORS -->
-                {% if form.errors %}
-                    <div class="alert alert-danger mt-3">
-                        {{ form.errors }}
-                    </div>
-                {% endif %}
+                <!-- ================= FORM ================= -->
+                <div class="p-4 p-md-5">
 
-                <!-- PREVIEW INFO -->
-                <div class="alert alert-info mt-4">
-                    🔥 {% trans "Ajoute une image claire + description pour vendre plus vite" %}
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row g-3">
+
+                            <!-- TITLE -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold">
+                                    {% trans "Titre du produit" %}
+                                </label>
+                                {{ form.title }}
+                            </div>
+
+                            <!-- CATEGORY -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-bold">
+                                    {% trans "Catégorie" %}
+                                </label>
+                                {{ form.category }}
+                            </div>
+
+                            <!-- PRICE -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-bold">
+                                    {% trans "Prix ($)" %}
+                                </label>
+                                {{ form.price }}
+                            </div>
+
+                            <!-- DESCRIPTION -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold">
+                                    {% trans "Description du produit" %}
+                                </label>
+                                {{ form.description }}
+                            </div>
+
+                            <!-- IMAGE -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-bold">
+                                    {% trans "Image du produit" %}
+                                </label>
+                                {{ form.image }}
+                            </div>
+
+                            <!-- EMAIL -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-bold">
+                                    {% trans "Email de contact" %}
+                                </label>
+                                {{ form.contact_email }}
+                            </div>
+
+                        </div>
+
+                        <!-- ERRORS -->
+                        {% if form.errors %}
+                        <div class="alert alert-danger mt-4 rounded-3">
+                            ⚠️ Veuillez corriger les erreurs ci-dessous :
+                            <br><br>
+                            {{ form.errors }}
+                        </div>
+                        {% endif %}
+
+                        <!-- INFO -->
+                        <div class="alert alert-info mt-4 rounded-3">
+
+                            🔥 <strong>Conseil de vente :</strong><br>
+
+                            ✔ Image claire et professionnelle<br>
+                            ✔ Description détaillée<br>
+                            ✔ Prix compétitif<br><br>
+
+                            🚀 Plus ton actif est clair, plus il se vend vite
+
+                        </div>
+
+                        <!-- BUTTON -->
+                        <button class="btn btn-primary w-100 py-3 fw-bold mt-3 rounded-3">
+                            🚀 {% trans "Publier maintenant" %}
+                        </button>
+
+                    </form>
+
                 </div>
 
-                <!-- BUTTON -->
-                <button class="btn btn-primary w-100 py-3 fw-bold mt-3">
-                    🚀 {% trans "Publier maintenant" %}
-                </button>
-
-            </form>
+            </div>
 
         </div>
 
