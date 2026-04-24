@@ -8,26 +8,29 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-md-8">
+        <div class="col-12 col-md-8">
 
             <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
 
-                <!-- HEADER -->
+                <!-- ================= HEADER ================= -->
                 <div class="card-header text-center text-white py-4"
                      style="background: linear-gradient(135deg, #004a99, #0066cc);">
 
                     <h2 class="fw-bold mb-1">🚀 Soumettre votre projet</h2>
-                    <p class="mb-0 opacity-75">Frais d’audit : 5$ • Analyse sous 48h</p>
+
+                    <p class="mb-0 opacity-75">
+                        Analyse professionnelle • Réponse sous 48h
+                    </p>
 
                 </div>
 
-                <!-- BODY -->
+                <!-- ================= BODY ================= -->
                 <div class="card-body p-4">
 
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
 
-                        <!-- NOM -->
+                        <!-- PROJECT NAME -->
                         <div class="mb-3">
                             <label class="form-label fw-bold">Nom du projet</label>
                             {{ form.project_name }}
@@ -35,20 +38,20 @@
 
                         <!-- DESCRIPTION -->
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Description</label>
+                            <label class="form-label fw-bold">Description du projet</label>
                             {{ form.description }}
                         </div>
 
-                        <!-- ROW -->
+                        <!-- GRID -->
                         <div class="row">
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label class="form-label fw-bold">Emplois à créer</label>
                                 {{ form.jobs_to_create }}
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Budget ($)</label>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label class="form-label fw-bold">Montant requis ($)</label>
                                 {{ form.amount_needed }}
                             </div>
 
@@ -56,27 +59,33 @@
 
                         <!-- IMAGE -->
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Image (optionnel)</label>
-                            {{ form.image_projet }}
+                            <label class="form-label fw-bold">Image du projet (optionnel)</label>
+                            {{ form.image }}
                         </div>
 
                         <!-- ERRORS -->
                         {% if form.errors %}
-                        <div class="alert alert-danger">
-                            ⚠️ Veuillez corriger les erreurs ci-dessous :
+                        <div class="alert alert-danger rounded-3">
+                            ⚠️ Veuillez corriger les erreurs :
                             <br><br>
                             {{ form.errors }}
                         </div>
                         {% endif %}
 
-                        <!-- INFO BOX -->
+                        <!-- INFO BUSINESS -->
                         <div class="alert alert-info rounded-3">
-                            🔍 Votre projet sera analysé sous 48h après soumission.
-                            <br>
-                            💡 Assurez-vous que les informations sont complètes.
+
+                            🔍 <strong>Processus d’évaluation :</strong><br>
+
+                            ✔ Analyse du projet<br>
+                            ✔ Vérification des données<br>
+                            ✔ Validation investissement<br><br>
+
+                            ⏱ Réponse sous 48h maximum
+
                         </div>
 
-                        <!-- BUTTON -->
+                        <!-- SUBMIT -->
                         <button class="btn btn-primary w-100 fw-bold py-3 rounded-3">
                             🚀 Envoyer le projet
                         </button>
@@ -85,9 +94,11 @@
 
                     <!-- BACK -->
                     <div class="text-center mt-3">
+
                         <a href="{% url 'home' %}" class="text-decoration-none">
                             ← Retour à l’accueil
                         </a>
+
                     </div>
 
                 </div>
