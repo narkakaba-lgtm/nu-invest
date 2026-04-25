@@ -1,7 +1,7 @@
 {% load static %}
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ LANGUAGE_CODE }}">
 
 <head>
     <meta charset="UTF-8">
@@ -33,11 +33,15 @@
         .navbar-brand {
             font-weight: 900;
             color: var(--primary) !important;
-            letter-spacing: 1px;
         }
 
         .nav-link {
             font-weight: 500;
+        }
+
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
         }
 
         main {
@@ -49,9 +53,12 @@
             border-top: 1px solid #eaeaea;
         }
 
-        .btn {
-            border-radius: 10px;
-            font-weight: 600;
+        /* MOBILE FIX */
+        @media (max-width: 768px) {
+            .navbar-nav .btn {
+                width: 100%;
+                margin-top: 5px;
+            }
         }
     </style>
 
@@ -65,12 +72,12 @@
 
     <div class="container">
 
-        <!-- BRAND -->
+        <!-- LOGO -->
         <a class="navbar-brand" href="{% url 'home' %}">
             NU INVEST
         </a>
 
-        <!-- MOBILE TOGGLE -->
+        <!-- MOBILE BUTTON -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -81,75 +88,88 @@
             <!-- LEFT -->
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">Accueil</a>
+                    <a class="nav-link" href="{% url 'home' %}">{% trans "Accueil" %}</a>
                 </li>
             </ul>
 
             <!-- RIGHT -->
             <ul class="navbar-nav ms-auto align-items-lg-center">
 
-                <!-- PAGES PUBLIQUES -->
+                <!-- 🌍 LANGUAGE SELECT -->
+                <li class="nav-item me-2">
+                    <form action="{% url 'set_language' %}" method="post">
+                        {% csrf_token %}
+                        <select name="language"
+                                class="form-select form-select-sm"
+                                onchange="this.form.submit()">
+                            <option value="fr" {% if LANGUAGE_CODE == 'fr' %}selected{% endif %}>🇫🇷 FR</option>
+                            <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>🇬🇧 EN</option>
+                            <option value="pt" {% if LANGUAGE_CODE == 'pt' %}selected{% endif %}>🇵🇹 PT</option>
+                        </select>
+                    </form>
+                </li>
+
+                <!-- PAGES -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'about' %}">À propos</a>
+                    <a class="nav-link" href="{% url 'about' %}">{% trans "À propos" %}</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'support' %}">Support</a>
+                    <a class="nav-link" href="{% url 'support' %}">{% trans "Support" %}</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'help' %}">Aide</a>
+                    <a class="nav-link" href="{% url 'help' %}">{% trans "Aide" %}</a>
                 </li>
 
                 {% if user.is_authenticated %}
 
-                    <!-- ACTIONS UTILISATEUR -->
+                    <!-- USER ACTIONS -->
                     <li class="nav-item">
-                        <a class="btn btn-warning btn-sm ms-lg-2 mt-2 mt-lg-0" href="{% url 'publier_vente' %}">
-                            💰 Vendre
+                        <a class="btn btn-warning btn-sm ms-lg-2" href="{% url 'publier_vente' %}">
+                            💰 {% trans "Vendre" %}
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-primary btn-sm ms-lg-2 mt-2 mt-lg-0" href="{% url 'deposer_projet' %}">
-                            🚀 Projet
+                        <a class="btn btn-primary btn-sm ms-lg-2" href="{% url 'deposer_projet' %}">
+                            🚀 {% trans "Projet" %}
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-success btn-sm ms-lg-2 mt-2 mt-lg-0" href="{% url 'quiz' %}">
-                            🏆 Quiz
+                        <a class="btn btn-success btn-sm ms-lg-2" href="{% url 'quiz' %}">
+                            🏆 {% trans "Quiz" %}
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-dark btn-sm ms-lg-2 mt-2 mt-lg-0" href="{% url 'dashboard' %}">
-                            Dashboard
+                        <a class="btn btn-dark btn-sm ms-lg-2" href="{% url 'dashboard' %}">
+                            {% trans "Dashboard" %}
                         </a>
                     </li>
 
-                    <!-- LOGOUT -->
-                    <li class="nav-item mt-2 mt-lg-0 ms-lg-2">
+                    <li class="nav-item ms-lg-2">
                         <form method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
                             <button class="btn btn-outline-danger btn-sm w-100">
-                                Déconnexion
+                                {% trans "Déconnexion" %}
                             </button>
                         </form>
                     </li>
 
                 {% else %}
 
-                    <!-- VISITEURS -->
+                    <!-- VISITOR -->
                     <li class="nav-item">
-                        <a class="btn btn-outline-primary btn-sm ms-lg-2 mt-2 mt-lg-0" href="{% url 'login' %}">
-                            Connexion
+                        <a class="btn btn-outline-primary btn-sm ms-lg-2" href="{% url 'login' %}">
+                            {% trans "Connexion" %}
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-dark btn-sm ms-lg-2 mt-2 mt-lg-0" href="{% url 'inscription' %}">
-                            S'inscrire
+                        <a class="btn btn-dark btn-sm ms-lg-2" href="{% url 'inscription' %}">
+                            {% trans "S'inscrire" %}
                         </a>
                     </li>
 
@@ -169,10 +189,10 @@
 
 <!-- ================= FOOTER ================= -->
 <footer class="text-center py-3 text-muted">
-    <small>© 2026 NU INVEST • Plateforme d’investissement SaaS</small>
+    <small>© 2026 NU INVEST</small>
 </footer>
 
-<!-- JS Bootstrap -->
+<!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 {% block extra_js %}{% endblock %}
