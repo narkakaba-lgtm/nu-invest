@@ -9,34 +9,23 @@
 
     <title>{% block title %}NU INVEST{% endblock %}</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --primary: #0052cc;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             background: #f6f8fb;
         }
 
         .navbar {
-            background: #ffffff;
+            background: #fff;
             border-bottom: 1px solid #eaeaea;
         }
 
         .navbar-brand {
             font-weight: 900;
-            color: var(--primary) !important;
-        }
-
-        .nav-link {
-            font-weight: 500;
+            color: #0052cc !important;
         }
 
         .btn {
@@ -66,39 +55,36 @@
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
 
-        <!-- LOGO -->
         <a class="navbar-brand" href="{% url 'home' %}">
             NU INVEST
         </a>
 
-        <!-- TOGGLE -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="nav">
 
-            <!-- LEFT -->
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">{% trans "Accueil" %}</a>
+                    <a class="nav-link" href="{% url 'home' %}">
+                        {% trans "Accueil" %}
+                    </a>
                 </li>
             </ul>
 
-            <!-- RIGHT -->
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+            <ul class="navbar-nav ms-auto align-items-center gap-2">
 
-                <!-- 🌍 LANGUAGE SWITCH -->
+                <!-- 🌍 LANGUAGE FIX IMPORTANT -->
                 <li class="nav-item">
                     <form action="{% url 'set_language' %}" method="post">
                         {% csrf_token %}
 
-                        <!-- IMPORTANT FIX -->
-                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <!-- FIX IMPORTANT -->
+                        <input type="hidden" name="next" value="{{ request.path }}">
 
                         <select name="language"
                                 class="form-select form-select-sm"
@@ -112,10 +98,17 @@
                     </form>
                 </li>
 
-                <!-- LINKS -->
-                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">{% trans "À propos" %}</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}">{% trans "Support" %}</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'help' %}">{% trans "Aide" %}</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about' %}">{% trans "À propos" %}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'support' %}">{% trans "Support" %}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'help' %}">{% trans "Aide" %}</a>
+                </li>
 
                 {% if user.is_authenticated %}
 
@@ -168,20 +161,15 @@
     </div>
 </nav>
 
-<!-- ================= CONTENT ================= -->
 <main class="container py-4">
     {% block content %}{% endblock %}
 </main>
 
-<!-- ================= FOOTER ================= -->
 <footer class="text-center py-3 text-muted">
     <small>© 2026 NU INVEST</small>
 </footer>
 
-<!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-{% block extra_js %}{% endblock %}
 
 </body>
 </html>
