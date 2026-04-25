@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.conf.urls.i18n import i18n_patterns
+from django.views.i18n import set_language   # ✅ IMPORTANT
 
 from platform_invest import views as v
 
@@ -28,6 +29,7 @@ from platform_invest import views as v
 # 🌍 LANGUE
 # ===============================
 urlpatterns = [
+    path('i18n/setlang/', set_language, name='set_language'),  # ✅ OBLIGATOIRE
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 
@@ -37,11 +39,9 @@ urlpatterns = [
 # ===============================
 urlpatterns += i18n_patterns(
 
-    # HOME / DASHBOARD
     path('', v.home, name='home'),
     path('dashboard/', v.dashboard, name='dashboard'),
 
-    # AUTH
     path('inscription/', v.inscription, name='inscription'),
 
     path('login/', auth_views.LoginView.as_view(
@@ -52,32 +52,25 @@ urlpatterns += i18n_patterns(
         next_page='home'
     ), name='logout'),
 
-    # MARKET
     path('market/publier/', v.publier_vente, name='publier_vente'),
     path('market/asset/<int:asset_id>/', v.detail_asset, name='detail_asset'),
     path('market/delete/<int:asset_id>/', v.supprimer_annonce, name='supprimer_annonce'),
 
-    # PROJETS
     path('projets/deposer/', v.deposer_projet, name='deposer_projet'),
     path('projets/confirmation/', v.confirmation_paiement, name='confirmation'),
     path('projets/delete/<int:project_id>/', v.supprimer_projet, name='supprimer_projet'),
 
-    # PAYMENT
     path('payment/create/<int:asset_id>/', v.create_payment, name='create_payment'),
     path('payment/<int:asset_id>/', v.payment_page, name='payment_page'),
 
-    # QUIZ
     path('quiz/', v.jouer_quiz, name='quiz'),
 
-    # STATIC PAGES
     path('about/', v.about, name='about'),
     path('privacy/', v.privacy, name='privacy'),
     path('support/', v.support, name='support'),
     path('help/', v.help_page, name='help'),
 )
 
-# ===============================
-# 📁 MEDIA (CORRIGÉ)
-# ===============================
+# MEDIA
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
