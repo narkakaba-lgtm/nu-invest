@@ -1,7 +1,7 @@
 {% load static %}
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="{{ LANGUAGE_CODE|default:'fr' }}">
 
 <head>
     <meta charset="UTF-8">
@@ -53,7 +53,6 @@
             border-top: 1px solid #eaeaea;
         }
 
-        /* MOBILE FIX */
         @media (max-width: 768px) {
             .navbar-nav .btn {
                 width: 100%;
@@ -67,9 +66,8 @@
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg sticky-top">
-
     <div class="container">
 
         <!-- LOGO -->
@@ -77,7 +75,7 @@
             NU INVEST
         </a>
 
-        <!-- MOBILE BUTTON -->
+        <!-- TOGGLE -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -93,66 +91,54 @@
             </ul>
 
             <!-- RIGHT -->
-            <ul class="navbar-nav ms-auto align-items-lg-center">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
 
-                <!-- 🌍 LANGUAGE SELECT -->
-                <li class="nav-item me-2">
+                <!-- 🌍 LANGUAGE -->
+                <li class="nav-item">
                     <form action="{% url 'set_language' %}" method="post">
                         {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
                         <select name="language"
                                 class="form-select form-select-sm"
                                 onchange="this.form.submit()">
+
                             <option value="fr" {% if LANGUAGE_CODE == 'fr' %}selected{% endif %}>🇫🇷 FR</option>
                             <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>🇬🇧 EN</option>
                             <option value="pt" {% if LANGUAGE_CODE == 'pt' %}selected{% endif %}>🇵🇹 PT</option>
+
                         </select>
                     </form>
                 </li>
 
-                <!-- PAGES -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'about' %}">{% trans "À propos" %}</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'support' %}">{% trans "Support" %}</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'help' %}">{% trans "Aide" %}</a>
-                </li>
+                <!-- LINKS -->
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">{% trans "À propos" %}</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'support' %}">{% trans "Support" %}</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'help' %}">{% trans "Aide" %}</a></li>
 
                 {% if user.is_authenticated %}
 
-                    <!-- USER ACTIONS -->
                     <li class="nav-item">
-                        <a class="btn btn-warning btn-sm ms-lg-2" href="{% url 'publier_vente' %}">
+                        <a class="btn btn-warning btn-sm" href="{% url 'publier_vente' %}">
                             💰 {% trans "Vendre" %}
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-primary btn-sm ms-lg-2" href="{% url 'deposer_projet' %}">
+                        <a class="btn btn-primary btn-sm" href="{% url 'deposer_projet' %}">
                             🚀 {% trans "Projet" %}
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-success btn-sm ms-lg-2" href="{% url 'quiz' %}">
-                            🏆 {% trans "Quiz" %}
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="btn btn-dark btn-sm ms-lg-2" href="{% url 'dashboard' %}">
+                        <a class="btn btn-dark btn-sm" href="{% url 'dashboard' %}">
                             {% trans "Dashboard" %}
                         </a>
                     </li>
 
-                    <li class="nav-item ms-lg-2">
+                    <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
-                            <button class="btn btn-outline-danger btn-sm w-100">
+                            <button class="btn btn-outline-danger btn-sm">
                                 {% trans "Déconnexion" %}
                             </button>
                         </form>
@@ -160,15 +146,14 @@
 
                 {% else %}
 
-                    <!-- VISITOR -->
                     <li class="nav-item">
-                        <a class="btn btn-outline-primary btn-sm ms-lg-2" href="{% url 'login' %}">
+                        <a class="btn btn-outline-primary btn-sm" href="{% url 'login' %}">
                             {% trans "Connexion" %}
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-dark btn-sm ms-lg-2" href="{% url 'inscription' %}">
+                        <a class="btn btn-dark btn-sm" href="{% url 'inscription' %}">
                             {% trans "S'inscrire" %}
                         </a>
                     </li>
@@ -178,24 +163,20 @@
             </ul>
 
         </div>
-
     </div>
 </nav>
 
-<!-- ================= CONTENT ================= -->
+<!-- CONTENT -->
 <main class="container py-4">
     {% block content %}{% endblock %}
 </main>
 
-<!-- ================= FOOTER ================= -->
+<!-- FOOTER -->
 <footer class="text-center py-3 text-muted">
     <small>© 2026 NU INVEST</small>
 </footer>
 
-<!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-{% block extra_js %}{% endblock %}
 
 </body>
 </html>
