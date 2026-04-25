@@ -29,20 +29,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'platform_invest',
 ]
 
 
 # ===============================
-# ⚙️ MIDDLEWARE (IMPORTANT)
+# ⚙️ MIDDLEWARE
 # ===============================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',  # 🌍 LANGUE
+
+    # 🌍 TRADUCTION (IMPORTANT)
+    'django.middleware.locale.LocaleMiddleware',
 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -92,13 +93,16 @@ DATABASES = {
 
 
 # ===============================
-# 🌍 INTERNATIONALIZATION
+# 🌍 INTERNATIONALISATION (FIX FINAL)
 # ===============================
 LANGUAGE_CODE = 'fr'
+
 TIME_ZONE = 'Africa/Luanda'
 
 USE_I18N = True
+USE_L10N = True   # 🔥 important pour traduction
 USE_TZ = True
+
 
 LANGUAGES = [
     ('fr', _('Français')),
@@ -109,11 +113,19 @@ LANGUAGES = [
 LOCALE_PATHS = [BASE_DIR / 'locale']
 
 
-# 🍪 LANG COOKIE FIX (important pour bouton langue)
+# 🍪 LANGUAGE FIX
 LANGUAGE_COOKIE_NAME = 'django_language'
-LANGUAGE_COOKIE_AGE = None
 LANGUAGE_COOKIE_PATH = '/'
+LANGUAGE_COOKIE_AGE = None
 LANGUAGE_COOKIE_SAMESITE = 'Lax'
+
+
+# ===============================
+# 🔐 CSRF FIX (PRODUCTION)
+# ===============================
+CSRF_TRUSTED_ORIGINS = [
+    "https://narcisse.pythonanywhere.com"
+]
 
 
 # ===============================
@@ -126,19 +138,18 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# WhiteNoise (prod)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # ===============================
-# 🔐 LOGIN
+# 🔐 AUTH
 # ===============================
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
 
 # ===============================
-# 🔒 PRODUCTION SECURITY
+# 🔒 SECURITY PROD
 # ===============================
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
