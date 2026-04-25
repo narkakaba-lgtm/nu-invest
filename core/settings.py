@@ -6,11 +6,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # ===============================
-# 🔐 SÉCURITÉ
+# 🔐 SECURITY
 # ===============================
 SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-key-dev')
 
-DEBUG = False  # ⚠️ FALSE en production
+DEBUG = False  # production
 
 ALLOWED_HOSTS = [
     "narcisse.pythonanywhere.com",
@@ -35,21 +35,18 @@ INSTALLED_APPS = [
 
 
 # ===============================
-# ⚙️ MIDDLEWARE
+# ⚙️ MIDDLEWARE (IMPORTANT)
 # ===============================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
-    # STATIC (production)
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
-
-    # 🌍 LANGUE (IMPORTANT)
-    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # 🌍 LANGUE
 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -70,10 +67,10 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',  # IMPORTANT
+                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.i18n',  # IMPORTANT
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -95,7 +92,7 @@ DATABASES = {
 
 
 # ===============================
-# 🌍 INTERNATIONALISATION
+# 🌍 INTERNATIONALIZATION
 # ===============================
 LANGUAGE_CODE = 'fr'
 TIME_ZONE = 'Africa/Luanda'
@@ -105,42 +102,43 @@ USE_TZ = True
 
 LANGUAGES = [
     ('fr', _('Français')),
-    ('pt', _('Português')),
     ('en', _('English')),
+    ('pt', _('Português')),
 ]
 
 LOCALE_PATHS = [BASE_DIR / 'locale']
 
-# 🔥 FIX bouton langue
+
+# 🍪 LANG COOKIE FIX (important pour bouton langue)
 LANGUAGE_COOKIE_NAME = 'django_language'
+LANGUAGE_COOKIE_AGE = None
+LANGUAGE_COOKIE_PATH = '/'
+LANGUAGE_COOKIE_SAMESITE = 'Lax'
 
 
 # ===============================
 # 📁 STATIC / MEDIA
 # ===============================
 STATIC_URL = '/static/'
-
-# dossier à créer (tu l’as déjà fait 👍)
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# 🔥 WhiteNoise (important prod)
+# WhiteNoise (prod)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # ===============================
-# 🔐 AUTH
+# 🔐 LOGIN
 # ===============================
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
 
 # ===============================
-# 🔒 SÉCURITÉ PROD
+# 🔒 PRODUCTION SECURITY
 # ===============================
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
